@@ -17,4 +17,14 @@ import java.util.UUID;
 public class PacienteModel {
     @Id
     private UUID id;
+
+    private String nome;
+
+    private String cpf;
+
+    private String senha;
+
+    private String email;
+
+
 }

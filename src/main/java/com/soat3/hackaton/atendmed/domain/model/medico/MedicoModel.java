@@ -1,5 +1,6 @@
 package com.soat3.hackaton.atendmed.domain.model.medico;
 
+import com.soat3.hackaton.atendmed.domain.enumerate.TipoEspecialidade;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -17,5 +18,14 @@ import java.util.UUID;
 public class MedicoModel {
     @Id
     private UUID id;
+
+    private String nome;
+
+    private String crm;
+
+    private String senha;
+
+    private TipoEspecialidade especialidade;
+
 
 }
