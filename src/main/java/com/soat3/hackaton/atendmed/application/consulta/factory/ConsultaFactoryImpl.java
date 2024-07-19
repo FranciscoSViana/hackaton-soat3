@@ -19,7 +19,7 @@ public class ConsultaFactoryImpl implements ConsultaFactory {
 
         return ConsultaModel.builder()
                 .id(UUID.randomUUID())
-                .dataHoraConsulta(dataProvider.obterDataHoraAtual())
+                .agenda(consulta.getAgenda())
                 .medico(consulta.getMedico())
                 .situacaoConsulta(SituacaoConsulta.SOLICITADA)
                 .build();

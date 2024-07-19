@@ -1,6 +1,7 @@
 package com.soat3.hackaton.atendmed.domain.model.consulta;
 
 import com.soat3.hackaton.atendmed.domain.enumerate.SituacaoConsulta;
+import com.soat3.hackaton.atendmed.domain.model.medico.AgendaModel;
 import com.soat3.hackaton.atendmed.domain.model.medico.MedicoModel;
 import com.soat3.hackaton.atendmed.domain.model.paciente.PacienteModel;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -19,19 +21,26 @@ import java.util.UUID;
 @Data
 public class ConsultaModel {
     @Id
+    @GeneratedValue
     private UUID id;
 
-    @OneToOne
-    @JoinColumn(name = "medico_id")
+    @ManyToOne
+    @JoinColumn(name = "medico_id", nullable = false)
+    @NotNull
     private MedicoModel medico;
 
-    @OneToOne
-    @JoinColumn(name = "paciente_id")
+    @ManyToOne
+    @JoinColumn(name = "paciente_id", nullable = false)
+    @NotNull
     private PacienteModel paciente;
 
-    private LocalDateTime dataHoraConsulta;
+    @ManyToOne
+    @JoinColumn(name = "agenda_id", nullable = false)
+    @NotNull
+    private AgendaModel agenda;
 
+    @Enumerated(EnumType.STRING)
+    @NotNull
     private SituacaoConsulta situacaoConsulta;
-
 
 }
