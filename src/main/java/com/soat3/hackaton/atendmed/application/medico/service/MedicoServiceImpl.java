@@ -1,13 +1,16 @@
 package com.soat3.hackaton.atendmed.application.medico.service;
 
+import com.soat3.hackaton.atendmed.adapter.consulta.model.AgendaResponse;
 import com.soat3.hackaton.atendmed.adapter.medico.model.MedicoRequest;
 import com.soat3.hackaton.atendmed.adapter.medico.model.MedicoResponse;
 import com.soat3.hackaton.atendmed.application.exception.NotFoundException;
+import com.soat3.hackaton.atendmed.application.medico.converter.AgendaConverter;
 import com.soat3.hackaton.atendmed.application.medico.converter.MedicoConverter;
 import com.soat3.hackaton.atendmed.application.medico.factory.MedicoFactory;
 import com.soat3.hackaton.atendmed.application.medico.service.MedicoService;
 
 import com.soat3.hackaton.atendmed.commons.utils.AuthUtil;
+import com.soat3.hackaton.atendmed.domain.enumerate.TipoEspecialidade;
 import com.soat3.hackaton.atendmed.domain.model.medico.MedicoModel;
 import com.soat3.hackaton.atendmed.domain.model.medico.AgendaModel;
 
@@ -32,6 +35,7 @@ public class MedicoServiceImpl implements MedicoService {
     private final AuthUtil authUtil;
     private final MedicoFactory medicoFactory;
     private final MedicoConverter medicoConverter;
+    private final AgendaConverter agendaConverter;
 
     @Override
     public MedicoResponse salvar(MedicoRequest medicoRequest) {
@@ -87,6 +91,14 @@ public class MedicoServiceImpl implements MedicoService {
         return authUtil.validarSenha(senha, medico.getSenha());
     }
 
+    @Override
+    public List<AgendaResponse> findAvailableAgendasByEspecialidadeAndPeriodo(TipoEspecialidade especialidade, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim) {
+        return agendaRepository.findAvailableAgendasByEspecialidadeAndSituacao(especialidade, dataHoraInicio, dataHoraFim).stream()
+                .map(agendaConverter::agendaModelToAgendaResponse)
+                .collect(Collectors.toList());
+
+    }
+
     private List<AgendaModel> criarAgendas(MedicoModel medico) {
         LocalDateTime agora = LocalDateTime.now();
         LocalDateTime umMesDepois = agora.plusMonths(1);
@@ -111,4 +123,6 @@ public class MedicoServiceImpl implements MedicoService {
                 })
                 .collect(Collectors.toList());
     }
+
+
 }

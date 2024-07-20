@@ -1,13 +1,16 @@
 package com.soat3.hackaton.atendmed.adapter.consulta;
 
+import com.soat3.hackaton.atendmed.adapter.consulta.model.AgendaResponse;
 import com.soat3.hackaton.atendmed.adapter.consulta.model.ConsultaRequest;
 import com.soat3.hackaton.atendmed.adapter.consulta.model.ConsultaResponse;
 import com.soat3.hackaton.atendmed.application.consulta.usecase.ConsultaUseCase;
+import com.soat3.hackaton.atendmed.domain.enumerate.TipoEspecialidade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -39,5 +42,17 @@ public class ConsultaController {
                                                            @RequestHeader("senha") String senha) {
         ConsultaResponse consultaCriada = consultaUseCase.aprovarOuRejeitarConsulta(aprovar, idConsulta);
         return ResponseEntity.ok(consultaCriada);
+    }
+
+    @GetMapping("/consultas/agendas")
+    public ResponseEntity<List<AgendaResponse>> getAvailableAgendasByEspecialidade(
+            @RequestParam("especialidade") TipoEspecialidade especialidade,
+            @RequestParam("dataHoraInicio") LocalDateTime dataHoraInicio,
+            @RequestParam("dataHoraFim") LocalDateTime dataHoraFim,
+            @RequestHeader("cpf") String cpf,
+            @RequestHeader("senha") String senha) {
+
+        List<AgendaResponse> agendas = consultaUseCase.obterAgendaPorEspecilidade(especialidade, dataHoraInicio, dataHoraFim);
+        return ResponseEntity.ok(agendas);
     }
 }
