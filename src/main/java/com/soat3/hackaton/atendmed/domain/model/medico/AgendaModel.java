@@ -17,7 +17,7 @@ import java.util.UUID;
 @Data
 public class AgendaModel {
     @Id
-    private UUID id;
+    String  id;
 
     @ManyToOne
     @JoinColumn(name = "medico_id")

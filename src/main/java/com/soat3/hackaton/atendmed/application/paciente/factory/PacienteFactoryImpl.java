@@ -12,7 +12,7 @@ public class PacienteFactoryImpl implements PacienteFactory {
     @Override
     public PacienteModel criar(PacienteRequest paciente) {
         return PacienteModel.builder()
-                .id(UUID.randomUUID())
+                .id(UUID.randomUUID().toString())
                 .nome(paciente.getNome())
                 .cpf(paciente.getCpf())
                 .senha(paciente.getSenha())

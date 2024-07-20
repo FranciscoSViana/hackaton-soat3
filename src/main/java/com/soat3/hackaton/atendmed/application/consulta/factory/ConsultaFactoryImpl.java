@@ -18,10 +18,11 @@ public class ConsultaFactoryImpl implements ConsultaFactory {
     public ConsultaModel criar(ConsultaRequest consulta) {
 
         return ConsultaModel.builder()
-                .id(UUID.randomUUID())
+                .id(UUID.randomUUID().toString())
                 .agenda(consulta.getAgenda())
                 .medico(consulta.getMedico())
                 .agenda(consulta.getAgenda())
+                .paciente(consulta.getPaciente())
                 .situacaoConsulta(SituacaoConsulta.SOLICITADA)
                 .build();
     }

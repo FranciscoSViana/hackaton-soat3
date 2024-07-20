@@ -11,9 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,8 +18,7 @@ import java.util.UUID;
 @Data
 public class ConsultaModel {
     @Id
-    @GeneratedValue
-    private UUID id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "medico_id", nullable = false)

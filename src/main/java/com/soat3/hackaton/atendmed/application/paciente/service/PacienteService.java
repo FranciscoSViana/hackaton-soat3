@@ -8,9 +8,9 @@ import java.util.UUID;
 
 public interface PacienteService {
     PacienteResponse salvar(PacienteRequest paciente);
-    PacienteResponse atualizar(UUID id, PacienteRequest pacienteRequest);
-    PacienteResponse buscarPorId(UUID id);
-    void deletar(UUID id);
+    PacienteResponse atualizar(String id, PacienteRequest pacienteRequest);
+    PacienteResponse buscarPorId(String id);
+    void deletar(String id);
     boolean validarCredenciais(String cpf, String senha);
 
     List<PacienteResponse> buscarTodos();

@@ -2,9 +2,7 @@ package com.soat3.hackaton.atendmed.domain.model.medico;
 
 import com.soat3.hackaton.atendmed.domain.enumerate.TipoEspecialidade;
 import com.soat3.hackaton.atendmed.domain.model.consulta.ConsultaModel;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,14 +18,14 @@ import java.util.UUID;
 @Data
 public class MedicoModel {
     @Id
-    private UUID id;
+    private String id;
 
     private String nome;
 
     private String crm;
 
     private String senha;
-
+    @Enumerated(EnumType.STRING)
     private TipoEspecialidade especialidade;
 
     @OneToMany(mappedBy = "medico")

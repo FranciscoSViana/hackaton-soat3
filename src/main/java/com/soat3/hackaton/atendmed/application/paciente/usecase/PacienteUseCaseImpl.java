@@ -23,12 +23,12 @@ public class PacienteUseCaseImpl implements PacienteUseCase {
     }
 
     @Override
-    public PacienteResponse atualizar(UUID id, PacienteRequest paciente) {
+    public PacienteResponse atualizar(String id, PacienteRequest paciente) {
         return service.atualizar(id, paciente);
     }
 
     @Override
-    public PacienteResponse buscarPorId(UUID id) {
+    public PacienteResponse buscarPorId(String id) {
         return service.buscarPorId(id);
     }
 
@@ -38,7 +38,7 @@ public class PacienteUseCaseImpl implements PacienteUseCase {
     }
 
     @Override
-    public void deletar(UUID id) {
+    public void deletar(String id) {
         service.deletar(id);
     }
 }

@@ -12,7 +12,7 @@ public class MedicoFactoryImpl implements MedicoFactory {
     @Override
     public MedicoModel criar(MedicoRequest medico) {
         return MedicoModel.builder()
-                .id(UUID.randomUUID())
+                .id(UUID.randomUUID().toString())
                 .nome(medico.getNome())
                 .crm(medico.getCrm())
                 .senha(medico.getSenha())

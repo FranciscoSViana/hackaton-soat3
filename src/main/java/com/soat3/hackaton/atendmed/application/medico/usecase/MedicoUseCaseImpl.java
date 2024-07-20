@@ -22,12 +22,12 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
     }
 
     @Override
-    public MedicoResponse atualizar(UUID id, MedicoRequest medico) {
+    public MedicoResponse atualizar(String id, MedicoRequest medico) {
         return service.atualizar(id, medico);
     }
 
     @Override
-    public MedicoResponse buscarPorId(UUID id) {
+    public MedicoResponse buscarPorId(String id) {
         return service.buscarPorId(id);
     }
 
@@ -37,7 +37,7 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
     }
 
     @Override
-    public void deletar(UUID id) {
+    public void deletar(String id) {
         service.deletar(id);
     }
 }

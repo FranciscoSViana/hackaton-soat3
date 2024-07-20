@@ -9,8 +9,8 @@ import java.util.UUID;
 
 public interface PacienteUseCase {
     PacienteResponse salvar(PacienteRequest paciente);
-    PacienteResponse atualizar(UUID id, PacienteRequest paciente);
-    PacienteResponse buscarPorId(UUID id);
+    PacienteResponse atualizar(String id, PacienteRequest paciente);
+    PacienteResponse buscarPorId(String id);
     List<PacienteResponse> buscarTodos();
-    void deletar(UUID id);
+    void deletar(String id);
 }

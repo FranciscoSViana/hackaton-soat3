@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
-public interface MedicoRepository extends JpaRepository<MedicoModel, UUID> {
+public interface MedicoRepository extends JpaRepository<MedicoModel, String> {
     Optional<MedicoModel> findByCrm(String crm);
 }

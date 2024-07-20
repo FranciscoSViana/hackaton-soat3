@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-public interface ConsultaRepository extends JpaRepository<ConsultaModel, UUID> {
+public interface ConsultaRepository extends JpaRepository<ConsultaModel, String> {
 }

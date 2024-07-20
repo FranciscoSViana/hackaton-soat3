@@ -1,4 +1,4 @@
-package com.soat3.hackaton.atendmed.commons.filter;
+package com.soat3.hackaton.atendmed.commons.filters;
 
 import com.soat3.hackaton.atendmed.application.medico.service.MedicoService;
 import com.soat3.hackaton.atendmed.application.paciente.service.PacienteService;
@@ -17,13 +17,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class HeaderValidationFilter implements Filter {
 
-    @Autowired
     private final PacienteService pacienteService;
-
-    @Autowired
     private final MedicoService medicoService;
 
     @Override
@@ -38,7 +35,14 @@ public class HeaderValidationFilter implements Filter {
         String path = httpRequest.getRequestURI();
         String method = httpRequest.getMethod();
 
-        if (!path.equals("/api/pacientes") || !"POST".equalsIgnoreCase(method)) {
+        // Bypass validation for POST requests to /api/pacientes and /api/medicos (registration endpoints)
+        if (method.equalsIgnoreCase("POST") && (path.equals("/api/pacientes") || path.equals("/api/medicos"))) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // Validate credentials for other endpoints
+        if (path.startsWith("/api/pacientes") && !method.equalsIgnoreCase("POST")) {
             String cpf = httpRequest.getHeader("cpf");
             String senha = httpRequest.getHeader("senha");
             if (cpf == null || cpf.isEmpty() || senha == null || senha.isEmpty() || !pacienteService.validarCredenciais(cpf, senha)) {
@@ -47,7 +51,7 @@ public class HeaderValidationFilter implements Filter {
             }
         }
 
-        if (!path.equals("/api/medicos") || !"POST".equalsIgnoreCase(method)) {
+        if (path.startsWith("/api/medicos") && !method.equalsIgnoreCase("POST")) {
             String crm = httpRequest.getHeader("crm");
             String senha = httpRequest.getHeader("senha");
             if (crm == null || crm.isEmpty() || senha == null || senha.isEmpty() || !medicoService.validarCredenciais(crm, senha)) {

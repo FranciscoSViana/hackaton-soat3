@@ -25,14 +25,14 @@ public class MedicoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MedicoResponse> atualizarMedico(@PathVariable UUID id, @RequestBody MedicoRequest medicoRequest,
+    public ResponseEntity<MedicoResponse> atualizarMedico(@PathVariable String id, @RequestBody MedicoRequest medicoRequest,
                                                           @RequestHeader("crm") String crm, @RequestHeader("senha") String senha) {
         MedicoResponse response = medicoUseCase.atualizar(id, medicoRequest);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MedicoResponse> buscarMedicoPorId(@PathVariable UUID id,
+    public ResponseEntity<MedicoResponse> buscarMedicoPorId(@PathVariable String id,
                                                             @RequestHeader("crm") String crm, @RequestHeader("senha") String senha) {
         MedicoResponse response = medicoUseCase.buscarPorId(id);
         return ResponseEntity.ok(response);
@@ -45,7 +45,7 @@ public class MedicoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarMedico(@PathVariable UUID id, @RequestHeader("crm") String crm, @RequestHeader("senha") String senha) {
+    public ResponseEntity<Void> deletarMedico(@PathVariable String id, @RequestHeader("crm") String crm, @RequestHeader("senha") String senha) {
         medicoUseCase.deletar(id);
         return ResponseEntity.noContent().build();
     }

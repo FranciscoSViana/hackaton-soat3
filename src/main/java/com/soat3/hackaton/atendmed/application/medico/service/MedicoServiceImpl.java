@@ -46,7 +46,7 @@ public class MedicoServiceImpl implements MedicoService {
     }
 
     @Override
-    public MedicoResponse atualizar(UUID id, MedicoRequest medicoRequest) {
+    public MedicoResponse atualizar(String id, MedicoRequest medicoRequest) {
         MedicoModel medico = medicoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Médico não encontrado"));
         medico.setNome(medicoRequest.getNome());
@@ -60,7 +60,7 @@ public class MedicoServiceImpl implements MedicoService {
     }
 
     @Override
-    public MedicoResponse buscarPorId(UUID id) {
+    public MedicoResponse buscarPorId(String id) {
         MedicoModel medico = medicoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Médico não encontrado"));
         return medicoConverter.medicoModelToMedicoResponse(medico);
@@ -74,7 +74,7 @@ public class MedicoServiceImpl implements MedicoService {
     }
 
     @Override
-    public void deletar(UUID id) {
+    public void deletar(String id) {
         MedicoModel medico = medicoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Médico não encontrado"));
         medicoRepository.delete(medico);
@@ -102,6 +102,7 @@ public class MedicoServiceImpl implements MedicoService {
                     return Stream.iterate(startTime, time -> time.plusMinutes(50))
                             .limit((endTime.toLocalTime().toSecondOfDay() - startTime.toLocalTime().toSecondOfDay()) / 3000L)
                             .map(time -> AgendaModel.builder()
+                                    .id(String.valueOf(UUID.randomUUID()))
                                     .medico(medico)
                                     .dataHoraInicio(time)
                                     .dataHoraFim(time.plusMinutes(50))

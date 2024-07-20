@@ -8,10 +8,10 @@ import java.util.UUID;
 
 public interface MedicoService {
     MedicoResponse salvar(MedicoRequest medico);
-    MedicoResponse atualizar(UUID id, MedicoRequest medicoRequest);
-    MedicoResponse buscarPorId(UUID id);
+    MedicoResponse atualizar(String id, MedicoRequest medicoRequest);
+    MedicoResponse buscarPorId(String id);
     List<MedicoResponse> buscarTodos();
-    void deletar(UUID id);
+    void deletar(String id);
     boolean validarCredenciais(String crm, String senha);
 
 }

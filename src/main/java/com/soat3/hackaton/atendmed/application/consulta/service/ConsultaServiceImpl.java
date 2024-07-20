@@ -40,7 +40,7 @@ public class ConsultaServiceImpl implements ConsultaService{
     }
 
     @Override
-    public ConsultaResponse atualizar(UUID id, ConsultaRequest consultaRequest) {
+    public ConsultaResponse atualizar(String id, ConsultaRequest consultaRequest) {
 
         ConsultaModel consultaModel = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
@@ -59,7 +59,7 @@ public class ConsultaServiceImpl implements ConsultaService{
     }
 
     @Override
-    public ConsultaResponse buscarPorId(UUID id) {
+    public ConsultaResponse buscarPorId(String id) {
 
         ConsultaModel consulta = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
@@ -75,7 +75,7 @@ public class ConsultaServiceImpl implements ConsultaService{
     }
 
     @Override
-    public void deletar(UUID id) {
+    public void deletar(String id) {
         repository.deleteById(id);
     }
 }

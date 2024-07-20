@@ -36,7 +36,7 @@ public class PacienteServiceImpl implements PacienteService {
     }
 
     @Override
-    public PacienteResponse atualizar(UUID id, PacienteRequest pacienteRequest) {
+    public PacienteResponse atualizar(String id, PacienteRequest pacienteRequest) {
 
         PacienteModel paciente = pacienteRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Paciente não encontrado"));
@@ -51,14 +51,14 @@ public class PacienteServiceImpl implements PacienteService {
     }
 
     @Override
-    public PacienteResponse buscarPorId(UUID id) {
+    public PacienteResponse buscarPorId(String id) {
         PacienteModel paciente = pacienteRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Paciente não encontrado"));
         return pacienteConverter.pacienteModelToPacienteResponse(paciente);
     }
 
     @Override
-    public void deletar(UUID id) {
+    public void deletar(String id) {
         PacienteModel paciente = pacienteRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Paciente não encontrado"));
         pacienteRepository.delete(paciente);
