@@ -21,6 +21,7 @@ public class ConsultaFactoryImpl implements ConsultaFactory {
                 .id(UUID.randomUUID())
                 .agenda(consulta.getAgenda())
                 .medico(consulta.getMedico())
+                .agenda(consulta.getAgenda())
                 .situacaoConsulta(SituacaoConsulta.SOLICITADA)
                 .build();
     }
