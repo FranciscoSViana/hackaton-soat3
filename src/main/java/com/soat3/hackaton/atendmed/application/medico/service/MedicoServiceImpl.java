@@ -105,6 +105,7 @@ public class MedicoServiceImpl implements MedicoService {
                                     .id(String.valueOf(UUID.randomUUID()))
                                     .medico(medico)
                                     .dataHoraInicio(time)
+                                    .situacao(true)
                                     .dataHoraFim(time.plusMinutes(50))
                                     .build());
                 })

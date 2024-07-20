@@ -41,10 +41,12 @@ public class HeaderValidationFilter implements Filter {
             return;
         }
 
-        // Validate credentials for other endpoints
+        // Validate credentials for /api/pacientes and /api/medicos endpoints
+        String cpf = httpRequest.getHeader("cpf");
+        String crm = httpRequest.getHeader("crm");
+        String senha = httpRequest.getHeader("senha");
+
         if (path.startsWith("/api/pacientes") && !method.equalsIgnoreCase("POST")) {
-            String cpf = httpRequest.getHeader("cpf");
-            String senha = httpRequest.getHeader("senha");
             if (cpf == null || cpf.isEmpty() || senha == null || senha.isEmpty() || !pacienteService.validarCredenciais(cpf, senha)) {
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Credenciais de paciente inválidas");
                 return;
@@ -52,19 +54,16 @@ public class HeaderValidationFilter implements Filter {
         }
 
         if (path.startsWith("/api/medicos") && !method.equalsIgnoreCase("POST")) {
-            String crm = httpRequest.getHeader("crm");
-            String senha = httpRequest.getHeader("senha");
             if (crm == null || crm.isEmpty() || senha == null || senha.isEmpty() || !medicoService.validarCredenciais(crm, senha)) {
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Credenciais de médico inválidas");
                 return;
             }
         }
 
-        if (path.startsWith("/v1/consulta")) {
-            String cpf = httpRequest.getHeader("cpf");
-            String senha = httpRequest.getHeader("senha");
-            if (cpf == null || cpf.isEmpty() || senha == null || senha.isEmpty() || !pacienteService.validarCredenciais(cpf, senha)) {
-                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Credenciais de paciente inválidas");
+        if (path.startsWith("/api/consultas")) {
+            if ((cpf == null || cpf.isEmpty() || senha == null || senha.isEmpty() || !pacienteService.validarCredenciais(cpf, senha)) &&
+                    (crm == null || crm.isEmpty() || senha == null || senha.isEmpty() || !medicoService.validarCredenciais(crm, senha))) {
+                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Credenciais inválidas");
                 return;
             }
         }

@@ -13,4 +13,7 @@ public interface ConsultaService {
     ConsultaResponse buscarPorId(String id);
     List<ConsultaResponse> buscarTodos();
     void deletar(String id);
+    List<ConsultaResponse> obterConsultas(String crm);
+    ConsultaResponse aprovarOuRejeitarConsulta(boolean aprovar, String idConsulta);
+
 }

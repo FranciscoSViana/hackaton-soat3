@@ -1,5 +1,7 @@
 package com.soat3.hackaton.atendmed.domain.model.consulta;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.soat3.hackaton.atendmed.domain.enumerate.SituacaoConsulta;
 import com.soat3.hackaton.atendmed.domain.model.medico.AgendaModel;
 import com.soat3.hackaton.atendmed.domain.model.medico.MedicoModel;
@@ -21,6 +23,7 @@ public class ConsultaModel {
     private String id;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "medico_id", nullable = false)
     @NotNull
     private MedicoModel medico;
@@ -38,5 +41,4 @@ public class ConsultaModel {
     @Enumerated(EnumType.STRING)
     @NotNull
     private SituacaoConsulta situacaoConsulta;
-
 }

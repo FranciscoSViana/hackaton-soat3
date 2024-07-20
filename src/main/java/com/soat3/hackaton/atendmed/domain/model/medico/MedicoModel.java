@@ -1,5 +1,7 @@
 package com.soat3.hackaton.atendmed.domain.model.medico;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.soat3.hackaton.atendmed.domain.enumerate.TipoEspecialidade;
 import com.soat3.hackaton.atendmed.domain.model.consulta.ConsultaModel;
 import jakarta.persistence.*;
@@ -9,7 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
@@ -25,14 +26,15 @@ public class MedicoModel {
     private String crm;
 
     private String senha;
+
     @Enumerated(EnumType.STRING)
     private TipoEspecialidade especialidade;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "medico")
     private List<ConsultaModel> consultas;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "medico")
     private List<AgendaModel> agendas;
-
-
 }

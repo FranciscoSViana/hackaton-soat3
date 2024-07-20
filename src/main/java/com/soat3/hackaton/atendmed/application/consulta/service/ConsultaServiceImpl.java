@@ -4,7 +4,11 @@ import com.soat3.hackaton.atendmed.adapter.consulta.model.ConsultaRequest;
 import com.soat3.hackaton.atendmed.adapter.consulta.model.ConsultaResponse;
 import com.soat3.hackaton.atendmed.application.consulta.converter.ConsultaConverter;
 import com.soat3.hackaton.atendmed.application.consulta.factory.ConsultaFactory;
+import com.soat3.hackaton.atendmed.application.exception.NotFoundException;
+import com.soat3.hackaton.atendmed.domain.enumerate.SituacaoConsulta;
 import com.soat3.hackaton.atendmed.domain.model.consulta.ConsultaModel;
+import com.soat3.hackaton.atendmed.domain.model.medico.AgendaModel;
+import com.soat3.hackaton.atendmed.domain.model.medico.MedicoModel;
 import com.soat3.hackaton.atendmed.infrastructure.repository.consulta.ConsultaRepository;
 import com.soat3.hackaton.atendmed.infrastructure.repository.medico.AgendaRepository;
 import com.soat3.hackaton.atendmed.infrastructure.repository.medico.MedicoRepository;
@@ -14,12 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.soat3.hackaton.atendmed.domain.constant.I18n.*;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class ConsultaServiceImpl implements ConsultaService{
+public class ConsultaServiceImpl implements ConsultaService {
 
     private final ConsultaRepository repository;
     private final ConsultaFactory factory;
@@ -31,7 +37,7 @@ public class ConsultaServiceImpl implements ConsultaService{
     @Override
     public ConsultaResponse salvar(ConsultaRequest consulta) {
 
-        ConsultaModel consultaCriada =  factory.criar(consulta);
+        ConsultaModel consultaCriada = factory.criar(consulta);
 
         ConsultaModel consultaNova = repository.save(consultaCriada);
 
@@ -43,13 +49,13 @@ public class ConsultaServiceImpl implements ConsultaService{
     public ConsultaResponse atualizar(String id, ConsultaRequest consultaRequest) {
 
         ConsultaModel consultaModel = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+                .orElseThrow(() -> new NotFoundException(CONSULTA_NAO_ENCONTRADA));
         consultaModel.setMedico(medicorepository.findById(consultaRequest.getMedico().getId())
-                .orElseThrow(() -> new RuntimeException("Médico não encontrado")));
+                .orElseThrow(() -> new NotFoundException(MEDICO_NAO_ENCONTRADO)));
         consultaModel.setPaciente(pacientepository.findById(consultaRequest.getPaciente().getId())
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado")));
+                .orElseThrow(() -> new NotFoundException(PACIENTE_NAO_ENCONTRADO)));
         consultaModel.setAgenda(agendaRepository.findById(consultaRequest.getAgenda().getId())
-                .orElseThrow(() -> new RuntimeException("Agenda não encontrada")));
+                .orElseThrow(() -> new NotFoundException(AGENDA_NAO_ENCONTRADA)));
 
         consultaModel.setSituacaoConsulta(consultaRequest.getSituacaoConsulta());
 
@@ -62,7 +68,7 @@ public class ConsultaServiceImpl implements ConsultaService{
     public ConsultaResponse buscarPorId(String id) {
 
         ConsultaModel consulta = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+                .orElseThrow(() -> new NotFoundException(CONSULTA_NAO_ENCONTRADA));
 
         return converter.consultaModelToConsultaResponse(consulta);
     }
@@ -78,4 +84,66 @@ public class ConsultaServiceImpl implements ConsultaService{
     public void deletar(String id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public List<ConsultaResponse> obterConsultas(String crm) {
+
+        MedicoModel medico = medicorepository.findByCrm(crm)
+                .orElseThrow(() -> new NotFoundException(MEDICO_NAO_ENCONTRADO));
+
+        return repository.findAllByMedico(medico).stream()
+                .map(converter::consultaModelToConsultaResponse)
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toList(),
+                        consultas -> {
+                            if (consultas.isEmpty()) {
+                                throw new NotFoundException("Consultas não encontradas para o médico com CRM: " + crm);
+                            }
+                            return consultas;
+                        }
+                ));
+
+    }
+
+    @Override
+    public ConsultaResponse aprovarOuRejeitarConsulta(boolean aprovar, String idConsulta) {
+
+        if(aprovar){
+
+            ConsultaModel consulta = repository.findById(idConsulta)
+                    .orElseThrow(() -> new NotFoundException(CONSULTA_NAO_ENCONTRADA));
+
+            consulta.setSituacaoConsulta(SituacaoConsulta.AGENDADA);
+
+            AgendaModel agenda = agendaRepository.findById(consulta.getAgenda().getId())
+                    .orElseThrow(() -> new NotFoundException(AGENDA_NAO_ENCONTRADA));
+
+            agenda.setSituacao(false);
+
+            agendaRepository.save(agenda);
+
+            return converter.consultaModelToConsultaResponse(consulta);
+
+        }
+
+        else{
+            ConsultaModel consulta = repository.findById(idConsulta)
+                    .orElseThrow(() -> new NotFoundException(CONSULTA_NAO_ENCONTRADA));
+
+            consulta.setSituacaoConsulta(SituacaoConsulta.CANCELADA);
+
+            AgendaModel agenda = agendaRepository.findById(consulta.getAgenda().getId())
+                    .orElseThrow(() -> new NotFoundException(AGENDA_NAO_ENCONTRADA));
+
+            agenda.setSituacao(true);
+
+            agendaRepository.save(agenda);
+
+            return converter.consultaModelToConsultaResponse(consulta);
+        }
+
+
+    }
+
+
 }
