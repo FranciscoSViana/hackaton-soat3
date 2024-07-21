@@ -45,7 +45,7 @@ public class ConsultaController {
     }
 
     @GetMapping("/consultas/agendas")
-    public ResponseEntity<List<AgendaResponse>> getAvailableAgendasByEspecialidade(
+    public ResponseEntity<List<AgendaResponse>> obterAgendaPorEspecilidade(
             @RequestParam("especialidade") TipoEspecialidade especialidade,
             @RequestParam("dataHoraInicio") LocalDateTime dataHoraInicio,
             @RequestParam("dataHoraFim") LocalDateTime dataHoraFim,

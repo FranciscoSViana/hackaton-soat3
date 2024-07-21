@@ -1,5 +1,6 @@
 package com.soat3.hackaton.atendmed.application.medico.service;
 
+import com.soat3.hackaton.atendmed.adapter.consulta.model.AgendaRequest;
 import com.soat3.hackaton.atendmed.adapter.consulta.model.AgendaResponse;
 import com.soat3.hackaton.atendmed.adapter.medico.model.MedicoRequest;
 import com.soat3.hackaton.atendmed.adapter.medico.model.MedicoResponse;
@@ -18,5 +19,6 @@ public interface MedicoService {
     void deletar(String id);
     boolean validarCredenciais(String crm, String senha);
     List<AgendaResponse> findAvailableAgendasByEspecialidadeAndPeriodo(TipoEspecialidade especialidade, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim);
+    void cadastrarAgenda(String medicoId, List<AgendaRequest> agendas);
 
 }

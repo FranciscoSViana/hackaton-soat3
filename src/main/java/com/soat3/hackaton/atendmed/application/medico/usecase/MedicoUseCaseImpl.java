@@ -1,8 +1,10 @@
 package com.soat3.hackaton.atendmed.application.medico.usecase;
 
+import com.soat3.hackaton.atendmed.adapter.consulta.model.AgendaRequest;
 import com.soat3.hackaton.atendmed.adapter.medico.model.MedicoRequest;
 import com.soat3.hackaton.atendmed.adapter.medico.model.MedicoResponse;
 import com.soat3.hackaton.atendmed.application.medico.service.MedicoService;
+import com.soat3.hackaton.atendmed.domain.model.medico.AgendaModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,5 +41,10 @@ public class MedicoUseCaseImpl implements MedicoUseCase {
     @Override
     public void deletar(String id) {
         service.deletar(id);
+    }
+
+    @Override
+    public void cadastrarAgenda(String crm, List<AgendaRequest> agendas) {
+         service.cadastrarAgenda(crm,agendas);
     }
 }

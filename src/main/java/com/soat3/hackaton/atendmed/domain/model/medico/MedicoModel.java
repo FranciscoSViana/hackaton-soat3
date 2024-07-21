@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Builder
@@ -37,4 +38,7 @@ public class MedicoModel {
     @JsonManagedReference
     @OneToMany(mappedBy = "medico")
     private List<AgendaModel> agendas;
+
+    private BigDecimal valorConsulta;
+
 }
