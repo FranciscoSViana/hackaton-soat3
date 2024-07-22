@@ -2,13 +2,13 @@ package com.soat3.hackaton.atendmed.infrastructure.repository.medico;
 
 import com.soat3.hackaton.atendmed.domain.enumerate.TipoEspecialidade;
 import com.soat3.hackaton.atendmed.domain.model.medico.AgendaModel;
+import com.soat3.hackaton.atendmed.domain.model.medico.MedicoModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 public interface AgendaRepository extends JpaRepository<AgendaModel, String> {
 
@@ -17,4 +17,6 @@ public interface AgendaRepository extends JpaRepository<AgendaModel, String> {
             @Param("especialidade") TipoEspecialidade especialidade,
             @Param("dataHoraInicio") LocalDateTime dataHoraInicio,
             @Param("dataHoraFim") LocalDateTime dataHoraFim);
+
+    boolean existsByMedicoAndDataHoraInicio(MedicoModel medico, LocalDateTime dataHoraInicio);
 }

@@ -105,16 +105,25 @@ public class MedicoServiceImpl implements MedicoService {
     public void cadastrarAgenda(String medicoId, List<AgendaRequest> agendas) {
         MedicoModel medico = medicoRepository.findByCrm(medicoId)
                 .orElseThrow(() -> new NotFoundException("Médico não encontrado"));
+        
+        List<AgendaModel> agendasSalvar = agendas.stream()
+                       .map(agendaRequest -> {
 
-        agendas.forEach(agenda -> {
-            agenda.setMedico(medico);
-        });
-
-        List<AgendaModel> agendasSalvar = agendas.stream().map(agendaConverter::agendaRequestToAgendaModel).collect(Collectors.toList());
-
-        agendasSalvar.forEach(agenda -> {
-              agenda.setId(UUID.randomUUID().toString());
-        });
+                            LocalDateTime dataHoraInicio = agendaRequest.getDataHoraInicio();
+                            LocalDateTime dataHoraFim = dataHoraInicio.plusMinutes(50);
+                            
+                             boolean exists = agendaRepository.existsByMedicoAndDataHoraInicio(medico, dataHoraInicio);
+                             if (exists) {
+                                return null;
+                             }
+                             AgendaModel agenda = agendaConverter.agendaRequestToAgendaModel(agendaRequest);
+                                         agenda.setId(UUID.randomUUID().toString());
+                                         agenda.setMedico(medico);
+                                             agenda.setDataHoraFim(dataHoraFim);
+                                             return agenda;
+                             })
+                              .filter(agenda -> agenda != null)
+                              .collect(Collectors.toList());
 
         agendaRepository.saveAll(agendasSalvar);
     }
