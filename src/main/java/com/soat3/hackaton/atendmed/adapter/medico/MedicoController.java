@@ -1,5 +1,6 @@
 package com.soat3.hackaton.atendmed.adapter.medico.controller;
 
+import com.soat3.hackaton.atendmed.adapter.consulta.model.AgendaRequest;
 import com.soat3.hackaton.atendmed.adapter.medico.model.MedicoRequest;
 import com.soat3.hackaton.atendmed.adapter.medico.model.MedicoResponse;
 import com.soat3.hackaton.atendmed.application.medico.usecase.MedicoUseCase;
@@ -48,5 +49,14 @@ public class MedicoController {
     public ResponseEntity<Void> deletarMedico(@PathVariable String id, @RequestHeader("crm") String crm, @RequestHeader("senha") String senha) {
         medicoUseCase.deletar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/agendas")
+    public ResponseEntity<Void> cadastrarAgenda(@RequestHeader("crm") String crm,
+                                                @RequestHeader("senha") String senha,
+                                                @RequestBody List<AgendaRequest> agendaRequest) {
+        medicoUseCase.cadastrarAgenda(crm, agendaRequest);
+
+        return ResponseEntity.ok().build();
     }
 }

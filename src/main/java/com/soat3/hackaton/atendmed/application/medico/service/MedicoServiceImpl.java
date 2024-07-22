@@ -7,12 +7,14 @@ import com.soat3.hackaton.atendmed.application.exception.NotFoundException;
 import com.soat3.hackaton.atendmed.application.medico.converter.AgendaConverter;
 import com.soat3.hackaton.atendmed.application.medico.converter.MedicoConverter;
 import com.soat3.hackaton.atendmed.application.medico.factory.MedicoFactory;
-import com.soat3.hackaton.atendmed.application.medico.service.MedicoService;
+import com.soat3.hackaton.atendmed.adapter.consulta.model.AgendaRequest;
 
 import com.soat3.hackaton.atendmed.commons.utils.AuthUtil;
 import com.soat3.hackaton.atendmed.domain.enumerate.TipoEspecialidade;
 import com.soat3.hackaton.atendmed.domain.model.medico.MedicoModel;
 import com.soat3.hackaton.atendmed.domain.model.medico.AgendaModel;
+
+
 
 import com.soat3.hackaton.atendmed.infrastructure.repository.medico.AgendaRepository;
 import com.soat3.hackaton.atendmed.infrastructure.repository.medico.MedicoRepository;
@@ -97,6 +99,33 @@ public class MedicoServiceImpl implements MedicoService {
                 .map(agendaConverter::agendaModelToAgendaResponse)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public void cadastrarAgenda(String medicoId, List<AgendaRequest> agendas) {
+        MedicoModel medico = medicoRepository.findByCrm(medicoId)
+                .orElseThrow(() -> new NotFoundException("Médico não encontrado"));
+        
+        List<AgendaModel> agendasSalvar = agendas.stream()
+                       .map(agendaRequest -> {
+
+                            LocalDateTime dataHoraInicio = agendaRequest.getDataHoraInicio();
+                            LocalDateTime dataHoraFim = dataHoraInicio.plusMinutes(50);
+                            
+                             boolean exists = agendaRepository.existsByMedicoAndDataHoraInicio(medico, dataHoraInicio);
+                             if (exists) {
+                                return null;
+                             }
+                             AgendaModel agenda = agendaConverter.agendaRequestToAgendaModel(agendaRequest);
+                                         agenda.setId(UUID.randomUUID().toString());
+                                         agenda.setMedico(medico);
+                                             agenda.setDataHoraFim(dataHoraFim);
+                                             return agenda;
+                             })
+                              .filter(agenda -> agenda != null)
+                              .collect(Collectors.toList());
+
+        agendaRepository.saveAll(agendasSalvar);
     }
 
     private List<AgendaModel> criarAgendas(MedicoModel medico) {
