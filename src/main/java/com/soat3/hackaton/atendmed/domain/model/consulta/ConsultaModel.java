@@ -41,4 +41,7 @@ public class ConsultaModel {
     @Enumerated(EnumType.STRING)
     @NotNull
     private SituacaoConsulta situacaoConsulta;
+
+    private String linkReuniao;
+
 }

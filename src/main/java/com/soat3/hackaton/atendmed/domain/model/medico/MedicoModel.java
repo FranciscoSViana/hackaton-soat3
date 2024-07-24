@@ -41,4 +41,6 @@ public class MedicoModel {
 
     private BigDecimal valorConsulta;
 
+    private String cep;
+
 }

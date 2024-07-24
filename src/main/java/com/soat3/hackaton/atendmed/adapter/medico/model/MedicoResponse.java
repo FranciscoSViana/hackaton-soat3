@@ -17,4 +17,5 @@ public class MedicoResponse {
     private String crm;
     private TipoEspecialidade especialidade;
     private BigDecimal valorConsulta;
+    private String cep;
 }

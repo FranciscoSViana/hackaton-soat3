@@ -16,7 +16,9 @@ public class MedicoFactoryImpl implements MedicoFactory {
                 .nome(medico.getNome())
                 .crm(medico.getCrm())
                 .senha(medico.getSenha())
+                .valorConsulta(medico.getValorConsulta())
                 .especialidade(medico.getEspecialidade())
+                .cep(medico.getCep())
                 .build();
     }
 }

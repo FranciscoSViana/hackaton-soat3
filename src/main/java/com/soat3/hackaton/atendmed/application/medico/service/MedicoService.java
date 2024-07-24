@@ -18,7 +18,7 @@ public interface MedicoService {
     List<MedicoResponse> buscarTodos();
     void deletar(String id);
     boolean validarCredenciais(String crm, String senha);
-    List<AgendaResponse> findAvailableAgendasByEspecialidadeAndPeriodo(TipoEspecialidade especialidade, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim);
+    List<AgendaResponse> findAvailableAgendasByEspecialidadeAndPeriodo(TipoEspecialidade especialidade, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, String cpf);
     void cadastrarAgenda(String medicoId, List<AgendaRequest> agendas);
 
 }

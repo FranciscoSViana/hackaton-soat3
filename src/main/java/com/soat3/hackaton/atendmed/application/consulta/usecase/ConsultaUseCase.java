@@ -12,7 +12,6 @@ public interface ConsultaUseCase {
     ConsultaResponse salvar(ConsultaRequest consulta);
     List<ConsultaResponse> obterConsultas(String crm);
     ConsultaResponse aprovarOuRejeitarConsulta(boolean aprovar, String idConsulta);
-    List<AgendaResponse> obterAgendaPorEspecilidade(TipoEspecialidade especialidade, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim);
-
-
+    List<AgendaResponse> obterAgendaPorEspecilidade(TipoEspecialidade especialidade, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, String cpf);
+    List<ConsultaResponse> consultasConfirmadas(String cpf);
 }

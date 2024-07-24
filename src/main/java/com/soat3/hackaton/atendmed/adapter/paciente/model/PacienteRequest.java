@@ -12,4 +12,5 @@ public class PacienteRequest {
     private String cpf;
     private String senha;
     private String email;
+    private String cep;
 }
