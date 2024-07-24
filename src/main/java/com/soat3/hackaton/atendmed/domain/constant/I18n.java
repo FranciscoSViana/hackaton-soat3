@@ -6,4 +6,6 @@ public class I18n {
     public static final String PACIENTE_NAO_ENCONTRADO = "Paciente não encontrada.";
     public static final String MEDICO_NAO_ENCONTRADO = "Medico não encontrada.";
 
+    public static final String URL_BASE = "https://meet.google.com/";
+
 }

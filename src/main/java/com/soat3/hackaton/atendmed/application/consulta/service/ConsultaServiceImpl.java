@@ -5,6 +5,7 @@ import com.soat3.hackaton.atendmed.adapter.consulta.model.ConsultaResponse;
 import com.soat3.hackaton.atendmed.application.consulta.converter.ConsultaConverter;
 import com.soat3.hackaton.atendmed.application.consulta.factory.ConsultaFactory;
 import com.soat3.hackaton.atendmed.application.exception.NotFoundException;
+import com.soat3.hackaton.atendmed.application.reuniao.service.ReunicaoService;
 import com.soat3.hackaton.atendmed.domain.enumerate.SituacaoConsulta;
 import com.soat3.hackaton.atendmed.domain.model.consulta.ConsultaModel;
 import com.soat3.hackaton.atendmed.domain.model.medico.AgendaModel;
@@ -34,6 +35,8 @@ public class ConsultaServiceImpl implements ConsultaService {
     private final MedicoRepository medicorepository;
     private final PacienteRepository pacientepository;
     private final AgendaRepository agendaRepository;
+
+    private final ReunicaoService reunicaoService;
 
     @Override
     public ConsultaResponse salvar(ConsultaRequest consulta) {
@@ -116,7 +119,7 @@ public class ConsultaServiceImpl implements ConsultaService {
 
             consulta.setSituacaoConsulta(SituacaoConsulta.AGENDADA);
 
-            //consulta.setLinkReuniao();
+            consulta.setLinkReuniao(reunicaoService.geradorReuniao());
 
             AgendaModel agenda = agendaRepository.findById(consulta.getAgenda().getId())
                     .orElseThrow(() -> new NotFoundException(AGENDA_NAO_ENCONTRADA));
