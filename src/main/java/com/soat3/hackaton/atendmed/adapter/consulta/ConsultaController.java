@@ -7,6 +7,7 @@ import com.soat3.hackaton.atendmed.application.consulta.usecase.ConsultaUseCase;
 import com.soat3.hackaton.atendmed.domain.enumerate.TipoEspecialidade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,21 +39,33 @@ public class ConsultaController {
     @PutMapping("/{aprovar}/{idConsulta}/aprovacao-consulta")
     public ResponseEntity<ConsultaResponse> aprovarOuRejeitar(@PathVariable boolean aprovar,
                                                               @PathVariable String idConsulta,
-                                                           @RequestHeader("crm") String cpf,
+                                                           @RequestHeader("crm") String crm,
                                                            @RequestHeader("senha") String senha) {
         ConsultaResponse consultaCriada = consultaUseCase.aprovarOuRejeitarConsulta(aprovar, idConsulta);
         return ResponseEntity.ok(consultaCriada);
     }
 
-    @GetMapping("/consultas/agendas")
+    @GetMapping("/consultas-paciente")
+    public ResponseEntity<List<ConsultaResponse>> consultasConfirmadas(
+                                                              @RequestHeader("cpf") String cpf,
+                                                              @RequestHeader("senha") String senha) {
+
+        List<ConsultaResponse> consultas = consultaUseCase.consultasConfirmadas(cpf);
+
+        return ResponseEntity.ok(consultas);
+    }
+
+    @GetMapping("/agendas")
     public ResponseEntity<List<AgendaResponse>> obterAgendaPorEspecilidade(
             @RequestParam("especialidade") TipoEspecialidade especialidade,
-            @RequestParam("dataHoraInicio") LocalDateTime dataHoraInicio,
-            @RequestParam("dataHoraFim") LocalDateTime dataHoraFim,
+            @RequestParam("dataHoraInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataHoraInicio,
+            @RequestParam("dataHoraFim") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataHoraFim,
             @RequestHeader("cpf") String cpf,
             @RequestHeader("senha") String senha) {
 
-        List<AgendaResponse> agendas = consultaUseCase.obterAgendaPorEspecilidade(especialidade, dataHoraInicio, dataHoraFim);
+        List<AgendaResponse> agendas = consultaUseCase.obterAgendaPorEspecilidade(especialidade, dataHoraInicio, dataHoraFim, cpf);
+
         return ResponseEntity.ok(agendas);
+
     }
 }

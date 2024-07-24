@@ -17,6 +17,7 @@ public class PacienteFactoryImpl implements PacienteFactory {
                 .cpf(paciente.getCpf())
                 .senha(paciente.getSenha())
                 .email(paciente.getEmail())
+                .cep(paciente.getCep())
                 .build();
     }
 }

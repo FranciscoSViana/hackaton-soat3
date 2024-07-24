@@ -34,8 +34,12 @@ public class ConsultaUseCaseImpl implements ConsultaUseCase {
         return service.aprovarOuRejeitarConsulta(aprovar, idConsulta);
     }
     @Override
-    public List<AgendaResponse> obterAgendaPorEspecilidade(TipoEspecialidade especialidade, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim) {
-        return medicoService.findAvailableAgendasByEspecialidadeAndPeriodo(especialidade, dataHoraInicio, dataHoraFim);
+    public List<AgendaResponse> obterAgendaPorEspecilidade(TipoEspecialidade especialidade, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, String cpf) {
+        return medicoService.findAvailableAgendasByEspecialidadeAndPeriodo(especialidade, dataHoraInicio, dataHoraFim, cpf);
+    }
+    @Override
+    public List<ConsultaResponse> consultasConfirmadas(String cpf) {
+        return service.consultasConfirmadas(cpf);
     }
 
 }

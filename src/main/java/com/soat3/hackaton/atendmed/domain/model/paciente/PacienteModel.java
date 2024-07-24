@@ -26,5 +26,7 @@ public class PacienteModel {
 
     private String email;
 
+    private String cep;
+
 
 }

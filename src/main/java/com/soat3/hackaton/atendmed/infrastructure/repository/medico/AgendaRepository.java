@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface AgendaRepository extends JpaRepository<AgendaModel, String> {
 
-    @Query("SELECT a FROM AgendaModel a WHERE a.medico.especialidade = :especialidade AND a.situacao = false AND a.dataHoraInicio >= :dataHoraInicio AND a.dataHoraFim <= :dataHoraFim")
+    @Query("SELECT a FROM AgendaModel a WHERE a.medico.especialidade = :especialidade AND a.situacao = true AND a.dataHoraInicio >= :dataHoraInicio AND a.dataHoraFim <= :dataHoraFim")
     List<AgendaModel> findAvailableAgendasByEspecialidadeAndSituacao(
             @Param("especialidade") TipoEspecialidade especialidade,
             @Param("dataHoraInicio") LocalDateTime dataHoraInicio,

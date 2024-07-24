@@ -3,6 +3,7 @@ package com.soat3.hackaton.atendmed.application.medico.service;
 import com.soat3.hackaton.atendmed.adapter.consulta.model.AgendaResponse;
 import com.soat3.hackaton.atendmed.adapter.medico.model.MedicoRequest;
 import com.soat3.hackaton.atendmed.adapter.medico.model.MedicoResponse;
+import com.soat3.hackaton.atendmed.application.cep.service.CepService;
 import com.soat3.hackaton.atendmed.application.exception.NotFoundException;
 import com.soat3.hackaton.atendmed.application.medico.converter.AgendaConverter;
 import com.soat3.hackaton.atendmed.application.medico.converter.MedicoConverter;
@@ -15,9 +16,10 @@ import com.soat3.hackaton.atendmed.domain.model.medico.MedicoModel;
 import com.soat3.hackaton.atendmed.domain.model.medico.AgendaModel;
 
 
-
+import com.soat3.hackaton.atendmed.domain.model.paciente.PacienteModel;
 import com.soat3.hackaton.atendmed.infrastructure.repository.medico.AgendaRepository;
 import com.soat3.hackaton.atendmed.infrastructure.repository.medico.MedicoRepository;
+import com.soat3.hackaton.atendmed.infrastructure.repository.paciente.PacienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,8 @@ public class MedicoServiceImpl implements MedicoService {
     private final MedicoFactory medicoFactory;
     private final MedicoConverter medicoConverter;
     private final AgendaConverter agendaConverter;
+    private final CepService cepService;
+    private final PacienteRepository pacienteRepository;
 
     @Override
     public MedicoResponse salvar(MedicoRequest medicoRequest) {
@@ -89,15 +93,28 @@ public class MedicoServiceImpl implements MedicoService {
     @Override
     public boolean validarCredenciais(String crm, String senha) {
         MedicoModel medico = medicoRepository.findByCrm(crm)
-                .orElseThrow(() -> new NotFoundException("Médico não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Médico nagendas = {ArrayList@17552}  size = 99ão encontrado"));
         return authUtil.validarSenha(senha, medico.getSenha());
     }
 
     @Override
-    public List<AgendaResponse> findAvailableAgendasByEspecialidadeAndPeriodo(TipoEspecialidade especialidade, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim) {
-        return agendaRepository.findAvailableAgendasByEspecialidadeAndSituacao(especialidade, dataHoraInicio, dataHoraFim).stream()
-                .map(agendaConverter::agendaModelToAgendaResponse)
+    public List<AgendaResponse> findAvailableAgendasByEspecialidadeAndPeriodo(TipoEspecialidade especialidade, LocalDateTime dataHoraInicio, LocalDateTime dataHoraFim, String cpf) {
+
+        PacienteModel paciente = pacienteRepository.findByCpf(cpf).orElseThrow(()->new RuntimeException("Paciente não localizado."));
+
+        List<AgendaModel> agendas = agendaRepository.findAvailableAgendasByEspecialidadeAndSituacao(especialidade, dataHoraInicio, dataHoraFim);
+
+        List<AgendaResponse> agendasResponse =
+
+                agendas.stream().map(agenda -> {
+                    AgendaResponse response = agendaConverter.agendaModelToAgendaResponse(agenda);
+                    double distancia = cepService.calcularDistanciaEntreCeps(agenda.getMedico().getCep(), paciente.getCep());
+                    response.setDistancia(String.valueOf(distancia));
+                    return response;
+                })
                 .collect(Collectors.toList());
+
+        return agendasResponse;
 
     }
 

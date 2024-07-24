@@ -21,5 +21,6 @@ public class ConsultaResponse {
     private PacienteResponse paciente;
     private AgendaResponse agenda;
     private  SituacaoConsulta situacaoConsulta;
+    private String linkReuniao;
 
 }

@@ -5,10 +5,12 @@ import com.soat3.hackaton.atendmed.adapter.consulta.model.ConsultaResponse;
 import com.soat3.hackaton.atendmed.application.consulta.converter.ConsultaConverter;
 import com.soat3.hackaton.atendmed.application.consulta.factory.ConsultaFactory;
 import com.soat3.hackaton.atendmed.application.exception.NotFoundException;
+import com.soat3.hackaton.atendmed.application.reuniao.service.ReunicaoService;
 import com.soat3.hackaton.atendmed.domain.enumerate.SituacaoConsulta;
 import com.soat3.hackaton.atendmed.domain.model.consulta.ConsultaModel;
 import com.soat3.hackaton.atendmed.domain.model.medico.AgendaModel;
 import com.soat3.hackaton.atendmed.domain.model.medico.MedicoModel;
+import com.soat3.hackaton.atendmed.domain.model.paciente.PacienteModel;
 import com.soat3.hackaton.atendmed.infrastructure.repository.consulta.ConsultaRepository;
 import com.soat3.hackaton.atendmed.infrastructure.repository.medico.AgendaRepository;
 import com.soat3.hackaton.atendmed.infrastructure.repository.medico.MedicoRepository;
@@ -33,6 +35,8 @@ public class ConsultaServiceImpl implements ConsultaService {
     private final MedicoRepository medicorepository;
     private final PacienteRepository pacientepository;
     private final AgendaRepository agendaRepository;
+
+    private final ReunicaoService reunicaoService;
 
     @Override
     public ConsultaResponse salvar(ConsultaRequest consulta) {
@@ -115,6 +119,8 @@ public class ConsultaServiceImpl implements ConsultaService {
 
             consulta.setSituacaoConsulta(SituacaoConsulta.AGENDADA);
 
+            consulta.setLinkReuniao(reunicaoService.geradorReuniao());
+
             AgendaModel agenda = agendaRepository.findById(consulta.getAgenda().getId())
                     .orElseThrow(() -> new NotFoundException(AGENDA_NAO_ENCONTRADA));
 
@@ -143,6 +149,18 @@ public class ConsultaServiceImpl implements ConsultaService {
         }
 
 
+    }
+
+    @Override
+    public List<ConsultaResponse> consultasConfirmadas(String cpf) {
+
+        PacienteModel paciente = pacientepository.findByCpf(cpf)
+                .orElseThrow(() -> new NotFoundException(PACIENTE_NAO_ENCONTRADO));
+
+        List<ConsultaModel> consultas = repository.findAllByPaciente(paciente);
+
+
+        return consultas.stream().map(converter::consultaModelToConsultaResponse).collect(Collectors.toList());
     }
 
 

@@ -15,5 +15,7 @@ public interface ConsultaService {
     void deletar(String id);
     List<ConsultaResponse> obterConsultas(String crm);
     ConsultaResponse aprovarOuRejeitarConsulta(boolean aprovar, String idConsulta);
+    List<ConsultaResponse> consultasConfirmadas(String cpf);
+
 
 }

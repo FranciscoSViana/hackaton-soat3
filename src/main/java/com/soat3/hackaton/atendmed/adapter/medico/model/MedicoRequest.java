@@ -16,5 +16,7 @@ public class MedicoRequest {
     private String senha;
     private TipoEspecialidade especialidade;
     private BigDecimal valorConsulta;
+    private String cep;
+
 
 }

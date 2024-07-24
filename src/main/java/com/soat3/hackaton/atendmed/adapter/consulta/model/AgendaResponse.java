@@ -17,4 +17,5 @@ public class AgendaResponse {
     public MedicoResponse medico;
     private LocalDateTime dataHoraInicio;
     private LocalDateTime dataHoraFim;
+    private String distancia;
 }
