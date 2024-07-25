@@ -52,10 +52,10 @@ kind: Service
 metadata:
   name: hackaton-soat-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: hackaton-soat
   ports:
     - protocol: TCP
-      port: 8080
-      nodePort: 32001
+      port: 80
+      targetPort: 8080
