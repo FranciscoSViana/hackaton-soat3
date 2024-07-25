@@ -7,19 +7,18 @@ import com.soat3.hackaton.atendmed.application.paciente.converter.PacienteConver
 import com.soat3.hackaton.atendmed.application.paciente.factory.PacienteFactory;
 import com.soat3.hackaton.atendmed.commons.utils.AuthUtil;
 import com.soat3.hackaton.atendmed.domain.model.paciente.PacienteModel;
-
 import com.soat3.hackaton.atendmed.infrastructure.repository.paciente.PacienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PacienteServiceImpl implements PacienteService {
 
+    public static final String PACIENTE_NAO_ENCONTRADO = "Paciente não encontrado";
     private final PacienteRepository pacienteRepository;
     private final AuthUtil authUtil;
     private final PacienteFactory pacienteFactory;
@@ -39,7 +38,7 @@ public class PacienteServiceImpl implements PacienteService {
     public PacienteResponse atualizar(String id, PacienteRequest pacienteRequest) {
 
         PacienteModel paciente = pacienteRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Paciente não encontrado"));
+                .orElseThrow(() -> new NotFoundException(PACIENTE_NAO_ENCONTRADO));
         paciente.setNome(pacienteRequest.getNome());
         paciente.setCpf(pacienteRequest.getCpf());
         paciente.setEmail(pacienteRequest.getEmail());
@@ -53,21 +52,21 @@ public class PacienteServiceImpl implements PacienteService {
     @Override
     public PacienteResponse buscarPorId(String id) {
         PacienteModel paciente = pacienteRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Paciente não encontrado"));
+                .orElseThrow(() -> new NotFoundException(PACIENTE_NAO_ENCONTRADO));
         return pacienteConverter.pacienteModelToPacienteResponse(paciente);
     }
 
     @Override
     public void deletar(String id) {
         PacienteModel paciente = pacienteRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Paciente não encontrado"));
+                .orElseThrow(() -> new NotFoundException(PACIENTE_NAO_ENCONTRADO));
         pacienteRepository.delete(paciente);
     }
 
     @Override
     public boolean validarCredenciais(String cpf, String senha) {
         PacienteModel paciente = pacienteRepository.findByCpf(cpf)
-                .orElseThrow(() -> new NotFoundException("Paciente não encontrado"));
+                .orElseThrow(() -> new NotFoundException(PACIENTE_NAO_ENCONTRADO));
         return authUtil.validarSenha(senha, paciente.getSenha());
     }
 

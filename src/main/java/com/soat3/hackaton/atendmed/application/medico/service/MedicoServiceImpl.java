@@ -34,6 +34,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class MedicoServiceImpl implements MedicoService {
 
+    public static final String MEDICO_NAO_ENCONTRADO = "Médico não encontrado";
     private final MedicoRepository medicoRepository;
     private final AgendaRepository agendaRepository;
     private final AuthUtil authUtil;
@@ -58,7 +59,7 @@ public class MedicoServiceImpl implements MedicoService {
     @Override
     public MedicoResponse atualizar(String id, MedicoRequest medicoRequest) {
         MedicoModel medico = medicoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Médico não encontrado"));
+                .orElseThrow(() -> new NotFoundException(MEDICO_NAO_ENCONTRADO));
         medico.setNome(medicoRequest.getNome());
         medico.setCrm(medicoRequest.getCrm());
         medico.setEspecialidade(medicoRequest.getEspecialidade());
@@ -72,7 +73,7 @@ public class MedicoServiceImpl implements MedicoService {
     @Override
     public MedicoResponse buscarPorId(String id) {
         MedicoModel medico = medicoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Médico não encontrado"));
+                .orElseThrow(() -> new NotFoundException(MEDICO_NAO_ENCONTRADO));
         return medicoConverter.medicoModelToMedicoResponse(medico);
     }
 
@@ -86,7 +87,7 @@ public class MedicoServiceImpl implements MedicoService {
     @Override
     public void deletar(String id) {
         MedicoModel medico = medicoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Médico não encontrado"));
+                .orElseThrow(() -> new NotFoundException(MEDICO_NAO_ENCONTRADO));
         medicoRepository.delete(medico);
     }
 
@@ -121,7 +122,7 @@ public class MedicoServiceImpl implements MedicoService {
     @Override
     public void cadastrarAgenda(String medicoId, List<AgendaRequest> agendas) {
         MedicoModel medico = medicoRepository.findByCrm(medicoId)
-                .orElseThrow(() -> new NotFoundException("Médico não encontrado"));
+                .orElseThrow(() -> new NotFoundException(MEDICO_NAO_ENCONTRADO));
         
         List<AgendaModel> agendasSalvar = agendas.stream()
                        .map(agendaRequest -> {

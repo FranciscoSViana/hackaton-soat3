@@ -3,10 +3,12 @@ name: Deploy
 on:
   push:
     branches:
+      - develop
       - main
 
 jobs:
   build-docker:
+    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -46,7 +48,7 @@ jobs:
 
       - run: aws sts get-caller-identity
 
-      - run: aws eks update-kubeconfig --region us-east-1 --name soat3-eks-KspLnZlg
+      - run: aws eks update-kubeconfig --region us-east-1 --name soat3-eks-VzkQKmDL
 
       - run: kubectl get svc
 

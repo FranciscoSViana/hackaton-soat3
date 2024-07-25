@@ -1,15 +1,13 @@
-package com.soat3.hackaton.atendmed.application.paciente.usecase.impl;
+package com.soat3.hackaton.atendmed.application.paciente.usecase;
 
 import com.soat3.hackaton.atendmed.adapter.paciente.model.PacienteRequest;
 import com.soat3.hackaton.atendmed.adapter.paciente.model.PacienteResponse;
 import com.soat3.hackaton.atendmed.application.paciente.service.PacienteService;
-import com.soat3.hackaton.atendmed.application.paciente.usecase.PacienteUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
