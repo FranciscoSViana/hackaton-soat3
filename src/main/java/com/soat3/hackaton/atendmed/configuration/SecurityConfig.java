@@ -22,7 +22,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())  // Desativa CSRF
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/**", "/v1/**").permitAll()
+                        .requestMatchers("/api/**", "/v1/**","/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**",
+                                "/swagger-resources/**", "/webjars/**")
+                        .permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> httpBasic.disable());
