@@ -2,6 +2,7 @@ package com.soat3.hackaton.atendmed.application.consulta.service;
 
 import com.soat3.hackaton.atendmed.adapter.consulta.model.ConsultaRequest;
 import com.soat3.hackaton.atendmed.adapter.consulta.model.ConsultaResponse;
+import com.soat3.hackaton.atendmed.application.cep.service.CepService;
 import com.soat3.hackaton.atendmed.application.consulta.converter.ConsultaConverter;
 import com.soat3.hackaton.atendmed.application.consulta.factory.ConsultaFactory;
 import com.soat3.hackaton.atendmed.application.exception.NotFoundException;
@@ -35,6 +36,7 @@ public class ConsultaServiceImpl implements ConsultaService {
     private final MedicoRepository medicorepository;
     private final PacienteRepository pacientepository;
     private final AgendaRepository agendaRepository;
+    private final CepService cepService;
 
     private final ReunicaoService reunicaoService;
 
@@ -159,8 +161,16 @@ public class ConsultaServiceImpl implements ConsultaService {
 
         List<ConsultaModel> consultas = repository.findAllByPaciente(paciente);
 
+        List<ConsultaResponse> consultasFeitas = consultas.stream().map(converter::consultaModelToConsultaResponse).collect(Collectors.toList());
 
-        return consultas.stream().map(converter::consultaModelToConsultaResponse).collect(Collectors.toList());
+        consultasFeitas.stream().forEach(consulta->{
+
+            double distancia = cepService.calcularDistanciaEntreCeps(consulta.getMedico().getCep(),consulta.getPaciente().getCep());
+            String distanciaValue = String.valueOf(distancia);
+            consulta.getAgenda().setDistancia(distanciaValue);
+        });
+
+        return consultasFeitas;
     }
 
 
