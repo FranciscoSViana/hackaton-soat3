@@ -1,4 +1,4 @@
-package com.soat3.hackaton.atendmed.commons.filters;
+package com.soat3.hackaton.atendmed.commons.filter;
 
 import com.soat3.hackaton.atendmed.application.medico.service.MedicoService;
 import com.soat3.hackaton.atendmed.application.paciente.service.PacienteService;
