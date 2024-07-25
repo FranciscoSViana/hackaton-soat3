@@ -1,4 +1,4 @@
-package com.soat3.hackaton.atendmed.adapter.medico.controller;
+package com.soat3.hackaton.atendmed.adapter.medico;
 
 import com.soat3.hackaton.atendmed.adapter.consulta.model.AgendaRequest;
 import com.soat3.hackaton.atendmed.adapter.medico.model.MedicoRequest;

@@ -15,7 +15,7 @@ spec:
         - name: mysql-hackaton-soat
           image: mysql:8.3.0
           ports:
-            - containerPort: 3306
+            - containerPort: 3307
           envFrom:
             - configMapRef:
                 name: hackaton-soat-config
@@ -36,7 +36,7 @@ spec:
                   name: mysql-hackaton-soat-secret
                   key: db_password
             - name: MYSQL_TCP_PORT
-              value: "3306"
+              value: "3307"
   selector:
     matchLabels:
       app: mysql-hackaton-soat

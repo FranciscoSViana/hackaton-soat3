@@ -1,4 +1,4 @@
-package com.soat3.hackaton.atendmed.adapter.paciente.controller;
+package com.soat3.hackaton.atendmed.adapter.paciente;
 
 import com.soat3.hackaton.atendmed.adapter.paciente.model.PacienteRequest;
 import com.soat3.hackaton.atendmed.adapter.paciente.model.PacienteResponse;
